@@ -1,0 +1,6 @@
+@TridentTech_HostAddress = http://localhost:5138
+
+GET {{TridentTech_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
