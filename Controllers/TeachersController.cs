@@ -28,7 +28,7 @@ namespace TridentTech.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(ResultResponse<TeacherModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(ResultResponse<GetTeachersModel>))]
         public async Task<IActionResult> Get()
         {
             var result = await _teacherService.GetTeachers();
@@ -41,7 +41,7 @@ namespace TridentTech.Controllers
         /// <param name="memberId">講師的會員Id</param>
         /// <returns></returns>
         [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(ResultResponse<TeacherClassModel>))]
-        [SwaggerResponse(StatusCodes.Status400BadRequest, $"{ResponseMessage.TeacherNotFoundCode}:{ResponseMessage.TeacherNotFound}")]
+        [SwaggerResponse(StatusCodes.Status404NotFound, $"{ResponseMessage.TeacherNotFoundCode}:{ResponseMessage.TeacherNotFound}")]
         [HttpGet("{memberId}")]
         public async Task<IActionResult> Get(int memberId)
         {
@@ -50,11 +50,13 @@ namespace TridentTech.Controllers
         }
 
         /// <summary>
-        /// 建立講師
+        /// 建立講師 (需登入講師帳號)
         /// </summary>
         /// <param name="request"></param>
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(ResultResponse<TeacherClassModel>))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest,$"{ResponseMessage.AccountIsRegistedCode}:{ResponseMessage.AccountIsRegisted}")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized,$"{ResponseMessage.UnauthorizedCode}:{ResponseMessage.Unauthorized}")]
         [IdentityAuthorize(true)]
         public async Task<IActionResult> Post([FromBody] TeacherBaseModel request)
         {

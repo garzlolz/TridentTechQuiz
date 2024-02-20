@@ -100,7 +100,6 @@ namespace TridentTech.Services.ApiService
                 result.HttpStatus = StatusCodes.Status400BadRequest;
                 result.Code = ResponseMessage.AccountIsRegisted;
                 result.Message = ResponseMessage.AccountIsRegistedCode;
-
                 return result;
             }
 
@@ -108,6 +107,8 @@ namespace TridentTech.Services.ApiService
             {
                 Account = param.Account,
                 Password = param.Password,
+                Email = param.Email,
+                Name = param.Name,
                 IsTeacher = param.IsTeacher
             };
 

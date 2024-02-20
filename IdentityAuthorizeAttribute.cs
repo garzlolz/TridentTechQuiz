@@ -58,21 +58,19 @@ namespace TridentTech
                 .FirstOrDefault());
 
             if (user.Identity == null
-                || !user.Identity.IsAuthenticated)
+                || !user.Identity.IsAuthenticated || string.IsNullOrEmpty(authHeader))
             {
-                if (!string.IsNullOrEmpty(authHeader))
-                {
-                    result = new()
-                    {
-                        Code = ResponseMessage.UnauthorizedCode,
-                        Message = ResponseMessage.Unauthorized
-                    };
 
-                    context.Result = new JsonResult(result)
-                    {
-                        StatusCode = StatusCodes.Status401Unauthorized
-                    };
-                }
+                result = new()
+                {
+                    Code = ResponseMessage.UnauthorizedCode,
+                    Message = ResponseMessage.Unauthorized
+                };
+
+                context.Result = new JsonResult(result)
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized
+                };
 
                 return;
             }

@@ -55,6 +55,18 @@ namespace TridentTech.Models
         [StringLength(100)]
         public string Password { get; set; } = null!;
         /// <summary>
+        /// 姓名
+        /// </summary>
+        [Required]
+        [StringLength(10)]
+        public string Name { get; set; } = null!;
+        /// <summary>
+        /// Email
+        /// </summary>
+        [Required]
+        [StringLength(30)]
+        public string Email { get; set; } = null!;
+        /// <summary>
         /// 是否為講師
         /// </summary>
         [Required]

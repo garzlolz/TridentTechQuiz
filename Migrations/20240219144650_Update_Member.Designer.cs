@@ -12,8 +12,8 @@ using TridentTech.DBModels;
 namespace TridentTech.Migrations
 {
     [DbContext(typeof(TridentTechContext))]
-    [Migration("20240217060921_Add_TeacherAndClass")]
-    partial class Add_TeacherAndClass
+    [Migration("20240219144650_Update_Member")]
+    partial class Update_Member
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,11 @@ namespace TridentTech.Migrations
                         .HasColumnName("end_at")
                         .HasComment("下課時間");
 
+                    b.Property<int?>("MemberId")
+                        .HasColumnType("int")
+                        .HasColumnName("member_id")
+                        .HasComment("會員 Id");
+
                     b.Property<string>("StartAt")
                         .IsRequired()
                         .HasMaxLength(4)
@@ -62,18 +67,14 @@ namespace TridentTech.Migrations
                         .HasColumnName("start_at")
                         .HasComment("上課時間");
 
-                    b.Property<int?>("TeacherId")
-                        .HasColumnType("int")
-                        .HasColumnName("teacher_id");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TeacherId");
+                    b.HasIndex("MemberId");
 
                     b.ToTable("classes");
                 });
 
-            modelBuilder.Entity("TridentTech.DBModels.Teacher", b =>
+            modelBuilder.Entity("TridentTech.DBModels.Member", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,39 +84,56 @@ namespace TridentTech.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Account")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("member_account")
+                        .HasComment("帳號");
+
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("email")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnName("member_email")
                         .HasComment("E-mail");
+
+                    b.Property<bool>("IsTeacher")
+                        .HasMaxLength(100)
+                        .HasColumnType("bit")
+                        .HasColumnName("is_teacher")
+                        .HasComment("是否為老師");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasColumnName("teacher_name")
-                        .HasComment("老師姓名");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnName("member_name")
+                        .HasComment("姓名");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("member_password")
+                        .HasComment("密碼");
 
                     b.HasKey("Id");
 
-                    b.ToTable("teachers", t =>
-                        {
-                            t.HasComment("老師Table");
-                        });
+                    b.ToTable("members");
                 });
 
             modelBuilder.Entity("TridentTech.DBModels.Class", b =>
                 {
-                    b.HasOne("TridentTech.DBModels.Teacher", "Teacher")
+                    b.HasOne("TridentTech.DBModels.Member", "Member")
                         .WithMany("Classes")
-                        .HasForeignKey("TeacherId")
+                        .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("Teacher");
+                    b.Navigation("Member");
                 });
 
-            modelBuilder.Entity("TridentTech.DBModels.Teacher", b =>
+            modelBuilder.Entity("TridentTech.DBModels.Member", b =>
                 {
                     b.Navigation("Classes");
                 });

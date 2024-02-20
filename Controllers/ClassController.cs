@@ -75,6 +75,8 @@ namespace TridentTech.Controllers
         [SwaggerResponse(StatusCodes.Status404NotFound,
             $"{ResponseMessage.ClassNotFoundCode}:{ResponseMessage.ClassNotFound}<br>" +
             $"{ResponseMessage.TeacherNotFoundCode}:{ResponseMessage.TeacherNotFound}")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized,$"{ResponseMessage.UnauthorizedCode}:{ResponseMessage.Unauthorized}")]
+        [IdentityAuthorize(true)]
         public async Task<IActionResult> Put(int id, [FromBody] ClassBaseModel request)
         {
             var result = await _classService.UpdateClass(id, request);

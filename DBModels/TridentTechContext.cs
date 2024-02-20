@@ -13,13 +13,13 @@ namespace TridentTech.DBModels
         /// </summary>
         public DbSet<Class> Classes { get; set; }
         /// <summary>
-        /// 講師 Table
-        /// </summary>
-        public DbSet<Teacher> Teachers { get; set; }
-        /// <summary>
         /// 會員 Table
         /// </summary>
         public DbSet<Member> Members { get; set; }
+        /// <summary>
+        /// 會員 Table
+        /// </summary>
+        public DbSet<ClassSelection> ClassSelectiones { get; set; }
 
         /// <summary>
         /// 建立Model 關聯
@@ -27,12 +27,23 @@ namespace TridentTech.DBModels
         /// <param name="builder"></param>
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Teacher>(entity =>
+            builder.Entity<Member>(entity =>
             {
                 entity.HasMany(t => t.Classes)
-                .WithOne(c => c.Teacher)
-                .HasForeignKey(t => t.TeacherId)
+                .WithOne(c => c.Member)
+                .HasForeignKey(t => t.MemberId)
                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<ClassSelection>(entity =>
+            {
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.MemberClasses)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(d => d.Class)
+                    .WithMany(p => p.MemberClasses)
+                    .OnDelete(DeleteBehavior.NoAction);
             });
         }
     }

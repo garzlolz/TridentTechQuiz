@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TridentTech.DBModels;
 
@@ -11,9 +12,11 @@ using TridentTech.DBModels;
 namespace TridentTech.Migrations
 {
     [DbContext(typeof(TridentTechContext))]
-    partial class TridentTechContextModelSnapshot : ModelSnapshot
+    [Migration("20240220143101_Update_MemberStringLength")]
+    partial class Update_MemberStringLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -24,6 +24,6 @@ namespace TridentTech.Services.Interface
         /// 取得講師列表
         /// </summary>
         /// <returns></returns>
-        public Task<ResultResponse<List<TeacherModel>?>> GetTeachers();
+        public Task<ResultResponse<List<GetTeachersModel>?>> GetTeachers();
     }
 }

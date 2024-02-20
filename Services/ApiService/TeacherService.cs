@@ -23,13 +23,26 @@ namespace TridentTech.Services.ApiService
         {
             ResultResponse result = new();
 
-            var data = new Teacher
+            var isExist = await DB.Members.AnyAsync(m => request.Account == m.Account && m.IsTeacher);
+
+            if (isExist)
             {
+                result.HttpStatus = StatusCodes.Status400BadRequest;
+                result.Code = ResponseMessage.AccountIsRegistedCode;
+                result.Message = ResponseMessage.AccountIsRegisted;
+                return result;
+            }
+
+            Member member = new()
+            {
+                Account = request.Account,
+                Password = request.Password,
                 Name = request.Name,
-                Email = request.Email
+                Email = request.Email,
+                IsTeacher = true
             };
 
-            await DB.Teachers.AddAsync(data);
+            await DB.Members.AddAsync(member);
             await DB.SaveChangesAsync();
 
             return result;
@@ -44,13 +57,14 @@ namespace TridentTech.Services.ApiService
         {
             ResultResponse<TeacherClassModel> result = new();
 
-            result.Data = await DB.Teachers.Include(t => t.Classes)
-                .Select(t => new TeacherClassModel
+            result.Data = await DB.Members
+                .Where(m => m.Id == id && m.IsTeacher)
+                .Select(m => new TeacherClassModel
                 {
-                    Id = t.Id,
-                    Name = t.Name,
-                    Email = t.Email,
-                    Classes = t.Classes.Select(c => new ClassModel
+                    Id = m.Id,
+                    Name = m.Name,
+                    Email = m.Email,
+                    Classes = m.Classes.Select(c => new ClassModel
                     {
                         Id = c.Id,
                         ClassName = c.ClassName,
@@ -58,11 +72,9 @@ namespace TridentTech.Services.ApiService
                         StartAt = c.StartAt,
                         EndAt = c.EndAt
                     })
-                    .OrderByDescending(c => c.Id)
-                    .Take(2)
                     .ToList()
                 })
-                .FirstOrDefaultAsync(t => t.Id == id);
+                .FirstOrDefaultAsync();
 
             if (result.Data == null)
             {
@@ -79,17 +91,18 @@ namespace TridentTech.Services.ApiService
         /// 取得講師列表
         /// </summary>
         /// <returns></returns>
-        public async Task<ResultResponse<List<TeacherModel>?>> GetTeachers()
+        public async Task<ResultResponse<List<GetTeachersModel>?>> GetTeachers()
         {
-            ResultResponse<List<TeacherModel>?> result = new()
+            ResultResponse<List<GetTeachersModel>?> result = new()
             {
-                Data = await DB.Teachers.Select(t => new TeacherModel
+                Data = await DB.Members
+                .Where(m => m.IsTeacher)
+                .Select(m => new GetTeachersModel
                 {
-                    Id = t.Id,
-                    Name = t.Name,
-                    Email = t.Email
+                    TeacherMemberId = m.Id,
+                    Email = m.Email,
+                    Name = m.Name,
                 })
-                .OrderByDescending(t => t.Id)
                 .Take(2)
                 .ToListAsync()
             };

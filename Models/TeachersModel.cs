@@ -1,23 +1,53 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TridentTech.Models
 {
     /// <summary>
     /// 講師資訊 Model
     /// </summary>
-    public class TeacherModel : TeacherBaseModel
+    public class GetTeachersModel
     {
         /// <summary>
         /// Id
         /// </summary>
-        public int Id { get; set; }
+        public int TeacherMemberId { get; set; }
+        /// <summary>
+        /// 姓名
+        /// </summary>
+        [Required]
+        public string Name { get; set; } = null!;
+        /// <summary>
+        /// Email
+        /// </summary>
+        [Required]
+        public string Email { get; set; } = null!;
     }
 
     /// <summary>
     /// 講師開課 Model
     /// </summary>
-    public class TeacherClassModel : TeacherModel
+    public class TeacherClassModel
     {
+        /// <summary>
+        /// Id
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// 講師會員 Id
+        /// </summary>
+        public int MemberId { get; set; }
+        /// <summary>
+        /// 姓名
+        /// </summary>
+        [Required]
+        public string Name { get; set; } = null!;
+        /// <summary>
+        /// Email
+        /// </summary>
+        [Required]
+        public string Email { get; set; } = null!;
         /// <summary>
         /// 課程列表
         /// </summary>
@@ -30,9 +60,17 @@ namespace TridentTech.Models
     public class TeacherBaseModel
     {
         /// <summary>
-        /// 講師會員 Id
+        /// 講師帳號
         /// </summary>
-        public int MemberId { get; set; } 
+        [StringLength(100)]
+        [Required]
+        public string Account { get; set; } = null!;
+        /// <summary>
+        /// 講師密碼
+        /// </summary>
+        [StringLength(100)]
+        [Required]
+        public string Password { get; set; } = null!;
         /// <summary>
         /// 姓名
         /// </summary>

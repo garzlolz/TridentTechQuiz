@@ -37,7 +37,7 @@ namespace TridentTech.Controllers
 
 
         /// <summary>
-        /// 註冊帳號
+        /// 註冊學生或講師帳號
         /// </summary>
         /// <param name="param">輸入參數</param>
         [HttpPost]

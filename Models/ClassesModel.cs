@@ -18,7 +18,7 @@ namespace TridentTech.Models
         /// <summary>
         /// 老師Id
         /// </summary>
-        public int? TeacherId { get; set; }
+        public int? TeacherMemberId { get; set; }
         /// <summary>
         /// 老師名稱
         /// </summary>
@@ -62,9 +62,10 @@ namespace TridentTech.Models
         [StringLength(4), MinLength(4)]
         public string EndAt { get; set; } = null!;
         /// <summary>
-        /// 講師 Id
+        /// 講師會員 Id
         /// </summary>
-        public int? TeacherId { get; set; }
+        [Required]
+        public int TeacherMemberId { get; set; }
     }
 
     /// <summary>

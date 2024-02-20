@@ -32,24 +32,35 @@ namespace TridentTech.DBModels
         [Required]
         public string Password { get; set; } = null!;
         /// <summary>
+        /// 姓名
+        /// </summary>
+        [Column("member_name")]
+        [StringLength(10)]
+        [Comment("姓名")]
+        [Required]
+        public string Name { get; set; } = null!;
+        /// <summary>
+        /// E-mail
+        /// </summary>
+        [Column("member_email")]
+        [StringLength(50)]
+        [Comment("E-mail")]
+        [Required]
+        public string Email { get; set; } = null!;
+        /// <summary>
         /// 是否為老師
         /// </summary>
         [Column("is_teacher")]
-        [StringLength(100)]
         [Comment("是否為老師")]
         [Required]
         public bool IsTeacher { get; set; } = false;
         /// <summary>
-        /// 是否為講師
+        /// 講師課程列表
         /// </summary>
-        [Column("teacher_id")]
-        [StringLength(100)]
-        [Comment("講師Id")]
-        [Required]
-        public int? TeacherId { get; set; }
+        public ICollection<Class>? Classes { get; set; }
         /// <summary>
-        /// 關聯講師
+        /// 學生關聯選課
         /// </summary>
-        public Teacher? Teacher { get; set; }
+        public ICollection<ClassSelection>? MemberClasses { get; set; }
     }
 }

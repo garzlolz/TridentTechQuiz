@@ -24,15 +24,6 @@ namespace TridentTech.Services.ApiService
         {
             ResultResponse<int> result = new();
 
-            if (request.TeacherId.HasValue
-                && await DB.Teachers.AnyAsync(t => t.Id == request.TeacherId))
-            {
-                result.HttpStatus = StatusCodes.Status404NotFound;
-                result.Code = ResponseMessage.TeacherNotFoundCode;
-                result.Message = ResponseMessage.TeacherNotFound;
-                return result;
-            }
-
             if (!CheckIsValidTime(request.StartAt) || !CheckIsValidTime(request.EndAt))
             {
                 result.HttpStatus = StatusCodes.Status400BadRequest;
@@ -54,8 +45,7 @@ namespace TridentTech.Services.ApiService
                 ClassName = request.ClassName,
                 Description = request.Description,
                 StartAt = request.StartAt,
-                EndAt = request.EndAt,
-                TeacherId = request.TeacherId
+                EndAt = request.EndAt
             };
 
             await DB.Classes.AddAsync(data);
@@ -124,7 +114,7 @@ namespace TridentTech.Services.ApiService
         /// <returns></returns>
         public async Task<ResultResponse<List<ClassListModel>>> GetClasses()
         {
-            ResultResponse<List<ClassListModel>?> result = new();
+            ResultResponse<List<ClassListModel>> result = new();
 
             result.Data = await DB.Classes
                 .Select(c => new ClassListModel
@@ -133,8 +123,8 @@ namespace TridentTech.Services.ApiService
                     ClassName = c.ClassName,
                     StartAt = c.StartAt,
                     EndAt = c.EndAt,
-                    TeacherId = c.TeacherId,
-                    TeacherName = c.Teacher.Name
+                    TeacherMemberId = c.Member.Id,
+                    TeacherName = c.Member.Name
                 })
                 .OrderByDescending(c => c.Id)
                 .Take(2)
@@ -177,21 +167,17 @@ namespace TridentTech.Services.ApiService
             @class.StartAt = request.StartAt;
             @class.EndAt = request.EndAt;
 
-            if (request.TeacherId.HasValue)
+            if (!await DB.Members.AnyAsync(t => t.Id == request.TeacherMemberId))
             {
-                if (!await DB.Teachers.AnyAsync(t => t.Id == request.TeacherId))
-                {
-                    result.HttpStatus = StatusCodes.Status404NotFound;
-                    result.Code = ResponseMessage.TeacherNotFoundCode;
-                    result.Message = ResponseMessage.TeacherNotFound;
-                    return result;
-                }
-
-                @class.TeacherId = request.TeacherId;
+                result.HttpStatus = StatusCodes.Status404NotFound;
+                result.Code = ResponseMessage.TeacherNotFoundCode;
+                result.Message = ResponseMessage.TeacherNotFound;
+                return result;
             }
 
-            await DB.SaveChangesAsync();
+            @class.MemberId = request.TeacherMemberId;
 
+            await DB.SaveChangesAsync();
             return result;
         }
 

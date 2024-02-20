@@ -47,13 +47,18 @@ namespace TridentTech.DBModels
         [Required]
         public string EndAt { get; set; } = null!;
         /// <summary>
-        /// 講師Id
+        /// 會員(講師)Id
         /// </summary>
-        [Column("teacher_id")]
-        public int? TeacherId { get; set; }
+        [Column("member_id")]
+        [Comment("會員 Id")]
+        public int? MemberId { get; set; }
         /// <summary>
-        /// 老師
+        /// 課程講師
         /// </summary>
-        public Teacher? Teacher { get; set; }
+        public Member? Member { get; set; }
+        /// <summary>
+        /// 課程關聯會員
+        /// </summary>
+        public ICollection<ClassSelection>? MemberClasses { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TridentTech.DBModels;
 
@@ -11,9 +12,11 @@ using TridentTech.DBModels;
 namespace TridentTech.Migrations
 {
     [DbContext(typeof(TridentTechContext))]
-    partial class TridentTechContextModelSnapshot : ModelSnapshot
+    [Migration("20240220134537_Add_ClassSelections")]
+    partial class Add_ClassSelections
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,12 +121,13 @@ namespace TridentTech.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
                         .HasColumnName("member_email")
                         .HasComment("E-mail");
 
                     b.Property<bool>("IsTeacher")
+                        .HasMaxLength(100)
                         .HasColumnType("bit")
                         .HasColumnName("is_teacher")
                         .HasComment("是否為老師");
