@@ -1,5 +1,5 @@
 # TridentTech
-
+## [Swagger Doc](https://app.swaggerhub.com/apis-docs/OSCAR861213/TridentTechQuiz/1)
 ## 1. 修改 appsettings.json 中的連線字串
 
 修改 appsettings.json 中的連線字串 或修改 appsettings.Development.json
