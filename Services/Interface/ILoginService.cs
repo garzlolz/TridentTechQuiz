@@ -5,11 +5,11 @@ namespace TridentTech.Services.Interface
     public interface ILoginService
     {
         /// <summary>
-        /// 登入
+        /// 登入學生或講師
         /// </summary>
         /// <param name="param">輸入參數</param>
         /// <returns></returns>
-        public Task<ResultResponse<LoginResponseModel>> Login(LoginRequestModel param);
+        public Task<ResultResponse<LoginResponseModel>> Login(bool isTeacher, LoginRequestModel param);
         /// <summary>
         /// 檢查該帳號是否可用 (for Authorize attribute)
         /// </summary>
@@ -17,10 +17,10 @@ namespace TridentTech.Services.Interface
         /// <returns></returns>
         public ResultResponse<bool> CheckAccountAvailable(string userId);
         /// <summary>
-        /// 註冊
+        /// 註冊學生或講師
         /// </summary>
         /// <param name="param">輸入參數</param>
         /// <returns></returns>
-        public Task<ResultResponse> Register(RegisterRequestModel param);
+        public Task<ResultResponse> Register(bool isTeacher, RegisterRequestModel param);
     }
 }

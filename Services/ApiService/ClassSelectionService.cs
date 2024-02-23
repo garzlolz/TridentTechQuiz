@@ -30,6 +30,8 @@ namespace TridentTech.Services.ApiService
             if (classSelectione == null)
             {
                 result.HttpStatus = StatusCodes.Status404NotFound;
+                result.Code = ResponseMessage.ClassNotFoundCode;
+                result.Message = ResponseMessage.ClassNotFound;
                 return result;
             }
 

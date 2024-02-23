@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using TridentTech.Const;
 using TridentTech.Models;
 using TridentTech.Services.Interface;
 
@@ -16,10 +18,11 @@ namespace TridentTech.Controllers
         }
 
         /// <summary>
-        /// 取得當前學生選課列表(需登入學生帳號)
+        /// 取得當前學生選課列表 (需登入學生帳號)
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(List<ClassListModel>))]
         [IdentityAuthorize]
         public async Task<IActionResult> GetSelections()
         {
@@ -33,6 +36,7 @@ namespace TridentTech.Controllers
         /// <param name="classId"></param>
         /// <returns></returns>
         [HttpGet("{classId}")]
+        [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(ResultResponse<List<GetStudentsResponseModel>>))]
         [IdentityAuthorize(true)]
         public async Task<IActionResult> GetStudents(int classId)
         {
@@ -45,6 +49,8 @@ namespace TridentTech.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(ResultResponse<List<ClassListModel>>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, $"{ResponseMessage.ClassNotFoundCode}:{ResponseMessage.ClassNotFound}")]
         [IdentityAuthorize]
         public async Task<IActionResult> Post([FromBody] CreateOrUpdateSelectionModel request)
         {
@@ -56,7 +62,9 @@ namespace TridentTech.Controllers
         /// 刪除選課 (需登入學生帳號)
         /// </summary>
         /// <param name="classId"></param>
-        [HttpDelete("{id}")]
+        [HttpDelete("{classId}")]
+        [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(List<ClassListModel>))]
+        [SwaggerResponse(StatusCodes.Status404NotFound, $"{ResponseMessage.ClassNotFoundCode}:{ResponseMessage.ClassNotFound}")]
         [IdentityAuthorize]
         public async Task<IActionResult> Delete(int classId)
         {

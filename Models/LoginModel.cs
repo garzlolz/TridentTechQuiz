@@ -19,11 +19,6 @@ namespace TridentTech.Models
         [Required]
         [StringLength(100)]
         public string Password { get; set; } = null!;
-        /// <summary>
-        /// 是否為講師
-        /// </summary>
-        [Required]
-        public bool IsTeacher { get; set; }
     }
 
     /// <summary>
@@ -66,10 +61,5 @@ namespace TridentTech.Models
         [Required]
         [StringLength(30)]
         public string Email { get; set; } = null!;
-        /// <summary>
-        /// 是否為講師
-        /// </summary>
-        [Required]
-        public bool IsTeacher { get; set; } = false;
     }
 }

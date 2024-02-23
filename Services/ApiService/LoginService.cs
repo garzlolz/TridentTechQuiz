@@ -19,13 +19,19 @@ namespace TridentTech.Services.ApiService
             _jwtService = jwtService;
         }
 
-        public async Task<ResultResponse<LoginResponseModel>> Login(LoginRequestModel param)
+        /// <summary>
+        /// 登入學生或講師
+        /// </summary>
+        /// <param name="isTeacher"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public async Task<ResultResponse<LoginResponseModel>> Login(bool isTeacher,LoginRequestModel param)
         {
             ResultResponse<LoginResponseModel> result = new();
 
             var member = await DB.Members
             .Where(m => m.Account == param.Account
-                && m.IsTeacher == param.IsTeacher)
+                && m.IsTeacher == isTeacher)
             .FirstOrDefaultAsync();
 
             // 尚未註冊
@@ -85,15 +91,16 @@ namespace TridentTech.Services.ApiService
         }
 
         /// <summary>
-        /// 註冊
+        /// 註冊學生或講師
         /// </summary>
+        /// <param name="isTeacher"></param>
         /// <param name="param"></param>
         /// <returns></returns>
-        public async Task<ResultResponse> Register(RegisterRequestModel param)
+        public async Task<ResultResponse> Register(bool isTeacher, RegisterRequestModel param)
         {
             ResultResponse result = new();
 
-            var isExist = await DB.Members.AnyAsync(m => m.Account == param.Account && m.IsTeacher == param.IsTeacher);
+            var isExist = await DB.Members.AnyAsync(m => m.Account == param.Account && m.IsTeacher == isTeacher);
 
             if (isExist)
             {
@@ -109,7 +116,7 @@ namespace TridentTech.Services.ApiService
                 Password = param.Password,
                 Email = param.Email,
                 Name = param.Name,
-                IsTeacher = param.IsTeacher
+                IsTeacher = isTeacher
             };
 
             await DB.Members.AddRangeAsync(member);

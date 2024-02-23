@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TridentTech.Const;
 using TridentTech.Models;
@@ -29,7 +28,7 @@ namespace TridentTech.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(List<ClassListModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(ResultResponse<List<ClassListModel>>))]
         public async Task<IActionResult> Get()
         {
             var result = await _classService.GetClasses();
@@ -39,14 +38,14 @@ namespace TridentTech.Controllers
         /// <summary>
         /// 取得課程詳細資訊
         /// </summary>
-        /// <param name="id">課程Id</param>
+        /// <param name="classId">課程Id</param>
         /// <returns></returns>
         [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(ResultResponse<ClassBaseModel>))]
         [SwaggerResponse(StatusCodes.Status404NotFound, $"{ResponseMessage.ClassNotFoundCode}:{ResponseMessage.ClassNotFound}")]
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int classId)
         {
-            var result = await _classService.GetClass(id);
+            var result = await _classService.GetClass(classId);
             return StatusCode(result.HttpStatus, result);
         }
 
@@ -55,6 +54,11 @@ namespace TridentTech.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Data = Id</returns>
+        /// <remarks>
+        /// 備註:
+        ///     1. 回傳課程Id
+        ///     2. StartAt、EndAt 使用格式HHmm
+        /// </remarks>
         [HttpPost]
         [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(ResultResponse<int>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, $"{ResponseMessage.TimeIsNotValidCode}:{ResponseMessage.TimeIsNotValid}")]
@@ -68,31 +72,31 @@ namespace TridentTech.Controllers
         /// <summary>
         /// 更新課程
         /// </summary>
-        /// <param name="id">課程Id</param>
+        /// <param name="classId">課程Id</param>
         /// <param name="request">課程資訊</param>
-        [HttpPut("{id}")]
+        [HttpPut("{classId}")]
         [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(ResultResponse<ClassListModel>))]
         [SwaggerResponse(StatusCodes.Status404NotFound,
             $"{ResponseMessage.ClassNotFoundCode}:{ResponseMessage.ClassNotFound}<br>" +
             $"{ResponseMessage.TeacherNotFoundCode}:{ResponseMessage.TeacherNotFound}")]
-        [SwaggerResponse(StatusCodes.Status401Unauthorized,$"{ResponseMessage.UnauthorizedCode}:{ResponseMessage.Unauthorized}")]
+        [SwaggerResponse(StatusCodes.Status401Unauthorized, $"{ResponseMessage.UnauthorizedCode}:{ResponseMessage.Unauthorized}")]
         [IdentityAuthorize(true)]
-        public async Task<IActionResult> Put(int id, [FromBody] ClassBaseModel request)
+        public async Task<IActionResult> Put(int classId, [FromBody] ClassBaseModel request)
         {
-            var result = await _classService.UpdateClass(id, request);
+            var result = await _classService.UpdateClass(classId, request);
             return StatusCode(result.HttpStatus, result);
         }
 
         /// <summary>
         /// 刪除課程
         /// </summary>
-        /// <param name="id">課程Id</param>
-        [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}")]
+        /// <param name="classId">課程Id</param>
+        [SwaggerResponse(StatusCodes.Status200OK, $"{ResponseMessage.SuccessCode}:{ResponseMessage.Success}", typeof(ResultResponse))]
         [SwaggerResponse(StatusCodes.Status404NotFound, $"{ResponseMessage.ClassNotFoundCode}:{ResponseMessage.ClassNotFound}")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int classId)
         {
-            var result = await _classService.DeleteClass(id);
+            var result = await _classService.DeleteClass(classId);
             return StatusCode(result.HttpStatus, result);
         }
     }
