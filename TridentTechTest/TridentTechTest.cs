@@ -5,12 +5,12 @@ using TridentTech.Models;
 namespace TridentTechTest
 {
     [TestClass]
-    public class UnitTest1
+    public class TridentTechTest
     {
         private const string BaseUrl = "https://localhost:7165/api/";
         private readonly HttpClient _client;
 
-        public UnitTest1()
+        public TridentTechTest()
         {
             _client = new HttpClient();
 
